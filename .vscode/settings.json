@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "gpio.h": "c",
+        "mcuwait.h": "c",
+        "my_tasks.h": "c"
+    }
+}
