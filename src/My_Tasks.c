@@ -3,6 +3,7 @@
 #include "hardware/gpio.h"
 #include "stdio.h"  // for printf()
 #include "McuWait.h"
+#include "McuSystemView.h"
 
 static void MainTask(void *pv){ // from lab, not relevant for quiz
 
@@ -10,6 +11,24 @@ static void MainTask(void *pv){ // from lab, not relevant for quiz
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 } 
+
+static void mainTask(void *pv){ // copied from Video c, SW6. Probably wont work since not all code is shown in video and not all is implemented here
+   // LEDS_Leds_e led = *(uint32_t*)pv;                 //led is not definied
+
+    //printf("mainTask led param is %d /n",(int)led);   //led is not definied
+    /* testing task priorities*/
+    //vTaskPrioritySet(NULL,uxTaskPriorityGet(NULL+1)):
+    //vTaskPrioritySet(NULL,uxTaskPriorityGet(NULL-1));
+    for(;;){
+        McuSystemView_Print((const char*)"Blink\r\n"); 
+        vTaskDelay(pdMS_TO_TICKS(500));
+        McuSystemView_OnUserStart(1); /* using ID 1 */
+       // Leds_Neg(led);                                //led is not definied 
+        McuSystemView_OnUserStop(1); /* using ID 1 */
+    }
+
+}
+
 
 void LedTaskQuizSW5(void *pv){
 unsigned int LED_PIN = (int)pv; // Red=20, Green=19, Blue=18

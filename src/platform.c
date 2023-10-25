@@ -8,10 +8,14 @@
 #include "gpio.h"
 #include "leds.h"
 
+#include "McuRTT.h"            // for SystemView
+#include "McuSystemView.h"     // for SystemView
 uint32_t SystemCoreClock = 120000000;
 
 void PL_Init(void) {
     McuLib_Init();
+    McuRTT_Init();
+    McuSystemView_Init();
     McuWait_Init();
     McuGPIO_Init();
     McuLED_Init();
@@ -29,6 +33,8 @@ void PL_Deinit(void) {
     Leds_Deinit();
     McuLED_Deinit();
     McuGPIO_Deinit();
-    McuWait_Deinit();
+    McuWait_Deinit(); 
+    McuSystemView_Deinit();
+    McuRTT_Deinit();
     McuLib_Deinit();
 }

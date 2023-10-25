@@ -23,7 +23,7 @@
 #define configTIMER_TASK_STACK_DEPTH                (800/sizeof(StackType_t)) /* stack size for Timer Service task */
 #define configTOTAL_HEAP_SIZE                       (64*1024)
 #define configUSE_HEAP_SCHEME                       (4)   // Implemented by DENIS, since i didn't find it anywhere else and the "Lab SW5" said it is required
-#define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS        (0)
+#define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS        (1)   // Einschalten, falls das System mittels SEGGER SystemView analysiert werden soll
 /* -------------------------------------------------*/
 /* I2C */
 #define CONFIG_USE_HW_I2C                           (1) /* if using HW I2C, otherwise use software bit banging */

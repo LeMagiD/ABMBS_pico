@@ -7,6 +7,8 @@
 #include "McuRTOS.h"
 #include "My_Tasks.h"
 
+
+
 static McuGPIO_Handle_t myPin;  //Device Handle Variable
 
 void main(void) {
