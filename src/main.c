@@ -6,17 +6,19 @@
 //#include "Blinker.h"  // first tests with board led
 #include "McuRTOS.h"
 #include "My_Tasks.h"
-
-
+#include "leds.h"
 
 static McuGPIO_Handle_t myPin;  //Device Handle Variable
+
+
 
 void main(void) {
 PL_Init();
 
-MakeLedTask();
-LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
 
+MakeButtonsTask();
+//MakeLedTask();
+//LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
 /* Lab SW4
 
 McuGPIO_Config_t config;    //Konfigurationsvariable erstellen
@@ -39,12 +41,6 @@ if (McuGPIO_IsLow(myPin)){
 for(;;) {
 
 
-
-
-
-
-//LetItBlink(1000,100); //Blinker.h
-//SoSLed();             //Blinker.h
 }
 
 
