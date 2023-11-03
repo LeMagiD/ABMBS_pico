@@ -6,4 +6,5 @@ void LedTaskQuizSW5(void *pv);
 void MakeLedTask(void);
 void ButtonTask(void *pv);
 void MakeButtonsTask(void);
+void ButtonIRQ(void);
 #endif

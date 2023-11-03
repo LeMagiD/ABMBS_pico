@@ -10,6 +10,13 @@
 
 #include "McuRTT.h"            // for SystemView
 #include "McuSystemView.h"     // for SystemView
+
+#include "buttons.h"
+#include "debounce.h"
+#include "McuButton.h"
+#include "McuDebounce.h"
+
+
 uint32_t SystemCoreClock = 120000000;
 
 void PL_Init(void) {
@@ -22,12 +29,17 @@ void PL_Init(void) {
     Leds_Init();
     Gpio_Init();
     McuRTOS_Init();
-   /* for(;;) { 
-      Gpio_Test();
-    }*/
+    BTN_Init();
+    Debounce_Init();
+    McuBtn_Init();
+    McuDbnc_Init();
 }
 
 void PL_Deinit(void) {
+    McuDbnc_Deinit();
+    McuBtn_Deinit();
+    Debounce_Deinit();
+    BTN_Deinit();
     McuRTOS_Deinit();
     Gpio_Deinit();
     Leds_Deinit();

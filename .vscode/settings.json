@@ -2,6 +2,11 @@
     "files.associations": {
         "gpio.h": "c",
         "mcuwait.h": "c",
-        "my_tasks.h": "c"
+        "my_tasks.h": "c",
+        "mcurtt.h": "c",
+        "mcubutton.h": "c",
+        "debounce.h": "c",
+        "buttons.h": "c",
+        "buttons_config.h": "c"
     }
 }

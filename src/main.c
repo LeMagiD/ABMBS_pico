@@ -8,15 +8,20 @@
 #include "My_Tasks.h"
 #include "leds.h"
 
+#include "buttons.h"
+#include "debounce.h"
+#include "McuButton.h"
+#include "McuDebounce.h"
+
 static McuGPIO_Handle_t myPin;  //Device Handle Variable
 
 
 
 void main(void) {
 PL_Init();
+// gpio_set_irq_enabled_with_callback(BUTTONS_PINS_NAVCENTER_PIN,GPIO_IRQ_EDGE_FALL,true, &gpio_IsrCallback);
 
-
-MakeButtonsTask();
+// MakeButtonsTask();
 //MakeLedTask();
 //LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
 /* Lab SW4
