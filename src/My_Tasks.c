@@ -6,6 +6,15 @@
 #include "McuSystemView.h"
 #include "McuGPIO.h"
 #include "leds.h"
+#include "buttons.h"
+
+typedef struct
+{
+  LEDS_Leds_e LED;
+  BTN_Buttons_e BUTTON;
+  // Weitere Parameter hier
+} TaskParams;
+
 
 static void MainTask(void *pv){ // from lab, not relevant for quiz
 
@@ -108,8 +117,7 @@ void ButtonTask(void *pv){
 
 
     }
-    
-
+  
 
     Leds_Off(LEDS_RED);
     Leds_Off(LEDS_BLUE);
@@ -119,6 +127,21 @@ void ButtonTask(void *pv){
 
 
   }
+}
+
+void DebounceButtTask(void *pv){
+Debounce_Init();
+TaskParams taskparams = *(TaskParams*) pv; 
+LEDS_Leds_e led = taskparams.LED;
+BTN_Buttons_e butt = taskparams.BUTTON;
+
+for(;;){
+
+if(BTN_IsPressed(butt)){
+
+  Leds_Neg(led);
+}
+}
 }
 
 
@@ -149,6 +172,26 @@ vTaskStartScheduler();
 }
 
 
-void ButtonIRQ(void){
-  
+
+void MakeDebounceButtTask(void){
+
+   TaskParams params ={
+    .LED = LEDS_BLUE,
+    .BUTTON = BTN_NAV_CENTER,
+  } ;
+
+BaseType_t Task1 = xTaskCreate(DebounceButtTask,
+                  "Debouncing Task",
+                  600/sizeof(StackType_t),
+                  &params, 
+                  tskIDLE_PRIORITY+1,
+                  (TaskHandle_t*)NULL);
+
+if(Task1!=pdPASS){
+printf("pdPASS == NULL, Task couldn't be created");
+}
+
+vTaskStartScheduler();
+
+
 }

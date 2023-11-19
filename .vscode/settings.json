@@ -7,6 +7,8 @@
         "mcubutton.h": "c",
         "debounce.h": "c",
         "buttons.h": "c",
-        "buttons_config.h": "c"
+        "buttons_config.h": "c",
+        "mcudebounce.h": "c",
+        "game.h": "c"
     }
 }
