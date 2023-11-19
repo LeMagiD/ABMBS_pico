@@ -58,7 +58,7 @@ static void OnDebounceEvent(McuDbnc_EventKinds event, uint32_t buttons) {
     case MCUDBNC_EVENT_LONG_RELEASED:
       button = BTN_RotateButton(button);
       /*! \todo need to handle button in application */
-      Game_OnButtonEvent(buttons,event);
+      Game_OnButtonEvent(button,event);
       break;
 
     case MCUDBNC_EVENT_END:
