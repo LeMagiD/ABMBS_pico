@@ -18,8 +18,14 @@ static McuGPIO_Handle_t myPin; // Device Handle Variable
 void IndicateStart(void)
 {
     Leds_Neg(LEDS_BLUE);
-    McuWait_Waitms(500);
+    McuWait_Waitms(50);
     Leds_Neg(LEDS_BLUE);
+    Leds_Neg(LEDS_RED);
+    McuWait_Waitms(50);
+    Leds_Neg(LEDS_RED);
+    Leds_Neg(LEDS_GREEN);
+    McuWait_Waitms(50);
+    Leds_Neg(LEDS_GREEN);
 }
 
 void main(void)
