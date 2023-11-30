@@ -14,7 +14,7 @@ typedef struct Game_event
 
 void DeleteGameTask(void)
 {
-    // empty on purpose -> not needed
+    // empty on purpose 
 }
 
 void MakeGameTask(void)

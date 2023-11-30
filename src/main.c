@@ -8,11 +8,13 @@
 #include "My_Tasks.h"
 #include "leds.h"
 #include "game.h"
+#include "McuWait.h"
 
 #include "buttons.h"
 #include "debounce.h"
 #include "McuButton.h"
 #include "McuDebounce.h"
+#include "sensor.h"
 
 static McuGPIO_Handle_t myPin; // Device Handle Variable
 void IndicateStart(void)
@@ -25,7 +27,7 @@ void IndicateStart(void)
     Leds_Neg(LEDS_RED);
     Leds_Neg(LEDS_GREEN);
     McuWait_Waitms(50);
-    Leds_Neg(LEDS_GREEN);
+    Leds_Neg(LEDS_GREEN); 
 }
 
 void main(void)
@@ -33,33 +35,18 @@ void main(void)
     PL_Init();
     IndicateStart();
 
-    MakeGameTask();
+    Sensor_Init();
 
+    // MakeGameTask();
     // MakeDebounceButtTask();
     //  MakeButtonsTask();
     // MakeLedTask();
     // LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
-    /* Lab SW4
 
-    McuGPIO_Config_t config;    //Konfigurationsvariable erstellen
-    McuGPIO_GetDefaultConfig(&config);  // Standard Konfigurationen für Konfigurationsvariable holen (überschreibbar)
-    config.isInput = true;
-    config.hw.pin = 11;         //Joystick mitte
-    config.hw.pull = McuGPIO_PULL_UP;
-
-    myPin = McuGPIO_InitGPIO(&config);  //Device Handle erstellen
-
-    if (myPin == NULL){
-        printf("myPin is NULL");        //Vorsichtig mit printf umgehen, ist sehr grosse Funktionen
-        return;
-        }
-    if (McuGPIO_IsLow(myPin)){
-        //do Something
-    }
-    */
 
     for (;;)
     {
+        // never leave main
     }
 
     return;

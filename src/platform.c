@@ -16,6 +16,9 @@
 #include "McuButton.h"
 #include "McuDebounce.h"
 
+#include "McuGenericI2C.h"
+#include "McuI2cLib.h"
+#include "McuSHT31.h"
 
 uint32_t SystemCoreClock = 120000000;
 
@@ -33,9 +36,16 @@ void PL_Init(void) {
     Debounce_Init();
     McuBtn_Init();
     McuDbnc_Init();
+    McuGenericI2C_Init();
+    McuI2cLib_Init();
+    McuSHT31_Init();
+
 }
 
 void PL_Deinit(void) {
+    McuSHT31_Deinit();
+    McuI2cLib_Deinit();
+    McuGenericI2C_Deinit();
     McuDbnc_Deinit();
     McuBtn_Deinit();
     Debounce_Deinit();
@@ -49,4 +59,5 @@ void PL_Deinit(void) {
     McuSystemView_Deinit();
     McuRTT_Deinit();
     McuLib_Deinit();
+
 }
