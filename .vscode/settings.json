@@ -9,6 +9,8 @@
         "buttons.h": "c",
         "buttons_config.h": "c",
         "mcudebounce.h": "c",
-        "game.h": "c"
+        "game.h": "c",
+        "mcurtos.h": "c",
+        "sensor.h": "c"
     }
 }

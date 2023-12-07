@@ -15,6 +15,7 @@
 #include "McuButton.h"
 #include "McuDebounce.h"
 #include "sensor.h"
+#include "sensor2.h"
 
 static McuGPIO_Handle_t myPin; // Device Handle Variable
 void IndicateStart(void)
@@ -33,12 +34,12 @@ void IndicateStart(void)
 void main(void)
 {
     PL_Init();
+    printf("Started XYZ\n");    // does not work
     IndicateStart();
 
-    Sensor_Init();
+    Sensor2_Init();
 
-    // MakeGameTask();
-    // MakeDebounceButtTask();
+    vTaskStartScheduler();
     //  MakeButtonsTask();
     // MakeLedTask();
     // LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
