@@ -34,17 +34,13 @@ void IndicateStart(void)
 void main(void)
 {
     PL_Init();
-    printf("Started XYZ\n");    // does not work
     IndicateStart();
 
     Sensor2_Init();
 
+
+
     vTaskStartScheduler();
-    //  MakeButtonsTask();
-    // MakeLedTask();
-    // LedTaskQuizSW5(19); // Pin 18, 19 or 20 for differt color leds
-
-
     for (;;)
     {
         // never leave main
