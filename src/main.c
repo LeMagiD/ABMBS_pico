@@ -36,9 +36,8 @@ void main(void)
     PL_Init();
     IndicateStart();
 
-    Sensor2_Init();
-
-
+    Sensor_Init();
+    Game_Init();
 
     vTaskStartScheduler();
     for (;;)

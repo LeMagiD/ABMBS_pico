@@ -10,6 +10,7 @@
 #include "McuUtility.h"
 #include "McuSHT31.h"
 #include "stdio.h"
+#include "i2cbus.h"
 
 #if configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
 #include "McuSystemView.h"
@@ -30,7 +31,9 @@ static void sensorTask(void *pv)
 
   for (;;)
   {
+    i2cLock();
     res = McuSHT31_ReadTempHum(&t, &h);
+    i2cUnlock();
     sensor.temperature = t;
     sensor.humidity = h;
 
@@ -73,5 +76,4 @@ void Sensor_Init(void)
     {
     }
   }
-  vTaskStartScheduler();
 }

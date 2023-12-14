@@ -8,6 +8,15 @@
 #include "McuRTOS.h"
 #include "leds.h"
 
+// Done as requested in Lab script sw10
+#include "boulder_images.h"
+#include "sprite.h"
+#include "gameModel.h"
+#include "gameView.h"
+#include "boulder.h"
+
+#include "i2cbus.h"
+
 #if PL_CONFIG_USE_OLED_LCD
   #include "i2cbus.h"
   #include "McuSSD1306.h"
@@ -111,26 +120,31 @@ void ShowTemperature(float value) {
 #if CONFIG_USE_QUEUE
 static void gameTask(void *pv) {
   bool centerButtonPressed;
+  bool centerButtonHold;
   Game_event_t event;
   BaseType_t res;
 
 #if PL_CONFIG_USE_OLED_LCD
-  I2CBus_LockBus();
+  i2cLock();
   McuSSD1306_Init();
   McuGDisplaySSD1306_Init();
-  I2CBus_ReleaseBus();
+  i2cUnlock();
 
 #if 0
   DrawBox();
   DrawText();
   ShowTemperature(3.5f);
 #endif
-  Game_ShowScreen(GAME_SCREEN_AEMBS);
+  // Game_ShowScreen(GAME_SCREEN_AEMBS);
+  Game_ShowScreen(GAME_SCREEN_DENIS);
   vTaskDelay(pdMS_TO_TICKS(2000));
-  Game_ShowScreen(GAME_SCREEN_GRAPHICS);
+  // Game_ShowScreen(GAME_SCREEN_GRAPHICS);
+  // vTaskDelay(pdMS_TO_TICKS(2000));
+  for(;;){
+  Game_ShowScreen(GAME_SCREEN_TEMPERATURE); /*! \todo show temperature every 1 seconds*/
   vTaskDelay(pdMS_TO_TICKS(2000));
-  Game_ShowScreen(GAME_SCREEN_TEMPERATURE);
-  vTaskDelay(pdMS_TO_TICKS(2000));
+}
+  
 #endif
 
   for(;;) {
@@ -152,6 +166,10 @@ static void gameTask(void *pv) {
       Leds_Off(LEDS_RED);
 #endif
     }
+    /* Erklärung, warum dies anfängt zu blinken:
+    Sobald man drückt, gilt es als pressed, also leuchtet die bleue Led (gemäss code oben) kurz auf
+    bleibt man nun auf dem knopf so zählt es nicht mehr als pressed sondern hold oder long_pressed-> deswegen blinkt nur noch die grüne led und nie mehr die 
+    solang gedrückt bleibt*/
     Leds_Neg(LEDS_GREEN);
     vTaskDelay(pdMS_TO_TICKS(100));
   }

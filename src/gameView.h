@@ -15,6 +15,7 @@ typedef enum Game_Screen_e {
   GAME_SCREEN_GRAPHICS, /*! \todo */
   GAME_SCREEN_TEMPERATURE, /*! \todo */
   GAME_SCREEN_GAMEPLAY, /* update gameplay screen and show all elements */
+  GAME_SCREEN_DENIS,
   /*! \todo add more items as needed */
 } Game_Screen_e;
 

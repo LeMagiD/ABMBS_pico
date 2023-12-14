@@ -4,10 +4,10 @@
 #include "buttons.h"
 #include "McuDebounce.h"
 
-void Game_OnButtonEvent(BTN_Buttons_e button, McuDbnc_EventKinds eventkind);
+void D_Game_OnButtonEvent(BTN_Buttons_e button, McuDbnc_EventKinds eventkind);
 void MakeGameTask(void);      
 void DeleteGameTask(void);      
-void GameEventTask(void *pv);
+void D_GameEventTask(void *pv);
 
 
 #endif

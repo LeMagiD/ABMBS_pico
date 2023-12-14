@@ -65,6 +65,7 @@
 /* McuSSD1306 */
 #define McuSSD1306_CONFIG_SSD1306_DRIVER_TYPE           (1106)
 #define McuSSD1306_CONFIG_DYNAMIC_DISPLAY_ORIENTATION   (0)
+#define PL_CONFIG_USE_OLED_LCD                          (1)       // IMPLEMENTED BY DENIS, DONT KNOW IF CORRECT
 #define McuSSD1306_CONFIG_FIXED_DISPLAY_ORIENTATION     McuSSD1306_CONFIG_ORIENTATION_LANDSCAPE
 /* -------------------------------------------------*/
 /* RTT */

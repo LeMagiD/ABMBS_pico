@@ -22,7 +22,7 @@ void MakeGameTask(void)
 {
     BaseType_t res;
 
-    res = xTaskCreate(GameEventTask,
+    res = xTaskCreate(D_GameEventTask,
                       "Game Event",
                       500 / sizeof(StackType_t),
                       (void *)NULL,
@@ -42,7 +42,7 @@ void MakeGameTask(void)
     vQueueAddToRegistry(eventQueue, "eventQueue");
     vTaskStartScheduler();
 }
-void GameEventTask(void *pv)
+void D_GameEventTask(void *pv)
 {
     (void)pv;
 
@@ -85,7 +85,7 @@ void GameEventTask(void *pv)
 
 
 
-void Game_OnButtonEvent(BTN_Buttons_e button, McuDbnc_EventKinds eventkind)
+void D_Game_OnButtonEvent(BTN_Buttons_e button, McuDbnc_EventKinds eventkind)
 {
     Game_event_t event;
     event.button = button;

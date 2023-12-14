@@ -17,4 +17,8 @@ void Sensor_Deinit(void);
  */
 void Sensor_Init(void);
 
+/*!
+ * \brief Getter function for temperature */
+float GetSht31Temp(void);
+
 #endif /* SENSOR_H_ */

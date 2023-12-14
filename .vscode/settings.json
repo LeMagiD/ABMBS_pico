@@ -11,6 +11,8 @@
         "mcudebounce.h": "c",
         "game.h": "c",
         "mcurtos.h": "c",
-        "sensor.h": "c"
+        "sensor.h": "c",
+        "i2cbus.h": "c",
+        "random": "c"
     }
 }

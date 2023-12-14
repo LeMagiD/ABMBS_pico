@@ -7,6 +7,7 @@
 #include "McuGPIO.h"
 #include "leds.h"
 #include "buttons.h"
+#include "debounce.h"
 
 typedef struct
 {
