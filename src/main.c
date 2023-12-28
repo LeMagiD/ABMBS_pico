@@ -36,7 +36,9 @@ void main(void)
     PL_Init();
     IndicateStart();
 
-    Sensor_Init();
+    // Sensor_Init();   
+    /* Wahrscheinliches Problem: Rekursive Mutex wird vom Sensor Task erstellt und dann erst vom Game Task
+    Die vom Sensor Task wird dann aber fälschlicherweise(?) zuerst gelöscht */
     Game_Init();
 
     vTaskStartScheduler();
