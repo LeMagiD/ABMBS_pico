@@ -79,8 +79,11 @@ static void Show2Liner(const unsigned char *text0, const unsigned char *text1) {
 
 static void PaintGamePlayScreen(void) {
   /*! \todo Make sure things are reentrant! */
+  i2cLock();
   McuGDisplaySSD1306_Clear();
   Boulder_PaintTiles();
+  i2cUnlock();
+  
   int cntr = 0;
   Sprite_t **sprites;
 

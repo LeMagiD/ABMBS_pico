@@ -32,19 +32,30 @@
   #include "McuFontHelv12Normal.h"
 #endif
 
+typedef enum Game_event_kind_e {
+	Game_Event_Kind_None,         /*!< initialization value */
+	Game_Event_Kind_Update_View,  /*!< request to update view */
+	Game_Event_Kind_Game_Lost,    /*!< game is lost */
+	Game_Event_Kind_Game_Won,     /*!< winning the game */
+	Game_Event_Kind_Button        /*!< button pressed */
+} Game_event_kind_e;
+
 #define CONFIG_USE_QUEUE  (1)
 /* First idea: implementing very simple and crude synchronization between the game task
  *       and the debouncing engine. It works with a global variable, and the access is implemented in a reentrant way.
  * Second and better approach: using a FreeRTOS queue to properly synchronize between debouncing events and game task.
  */
 
-typedef struct {
-#if !CONFIG_USE_QUEUE
-  bool validEvent; /* used to mark if event is valid. Avoids double-reading */
-#endif
-  BTN_Buttons_e button; /* button of the event */
-  McuDbnc_EventKinds kind; /* kind of button event */
+typedef struct Game_event_t {
+	Game_event_kind_e kind; /* kind of event. Data is inside union */
+	union u_ {
+		struct { /* for Game_Event_Kind_Button */
+			BTN_Buttons_e button;
+			McuDbnc_EventKinds kind;
+		} btn;
+	} u;
 } Game_event_t;
+
 
 #if CONFIG_USE_QUEUE
   static QueueHandle_t gameEventQueue; /* queue handle */
@@ -53,6 +64,7 @@ typedef struct {
 #else
   static /*volatile*/  Game_event_t GameEvent;
 #endif
+
 
 #if CONFIG_USE_QUEUE
 static void Game_SendEvent(Game_event_t *event) {
@@ -64,19 +76,14 @@ static void Game_SendEvent(Game_event_t *event) {
 #endif
 
 void Game_OnButtonEvent(BTN_Buttons_e button, McuDbnc_EventKinds kind) {
-#if CONFIG_USE_QUEUE
-  Game_event_t event;
-
-  event.button = button;
-  event.kind = kind;
+  #if CONFIG_USE_QUEUE
+	Game_event_t event;
+	
+	event.kind = Game_Event_Kind_Button;
+	event.u.btn.button = button;
+	event.u.btn.kind = kind;
   Game_SendEvent(&event);
-#else
-  taskENTER_CRITICAL(); /* task critical section: events are created by timer task callback */
-  GameEvent.validEvent = true;
-  GameEvent.button = button;
-  GameEvent.kind = kind;
-  taskEXIT_CRITICAL();
-#endif
+  #endif
 }
 
 #if 0 && PL_CONFIG_USE_OLED_LCD
@@ -119,10 +126,9 @@ void ShowTemperature(float value) {
 
 #if CONFIG_USE_QUEUE
 static void gameTask(void *pv) {
-  bool centerButtonPressed;
-  bool centerButtonHold;
   Game_event_t event;
   BaseType_t res;
+  Game_New();
 
 #if PL_CONFIG_USE_OLED_LCD
   i2cLock();
@@ -135,43 +141,66 @@ static void gameTask(void *pv) {
   DrawText();
   ShowTemperature(3.5f);
 #endif
-  // Game_ShowScreen(GAME_SCREEN_AEMBS);
+
+  // Show that OLED works
   Game_ShowScreen(GAME_SCREEN_DENIS);
-  vTaskDelay(pdMS_TO_TICKS(2000));
-  // Game_ShowScreen(GAME_SCREEN_GRAPHICS);
-  // vTaskDelay(pdMS_TO_TICKS(2000));
-  for(;;){
-  Game_ShowScreen(GAME_SCREEN_TEMPERATURE); /*! \todo show temperature every 1 seconds*/
-  vTaskDelay(pdMS_TO_TICKS(2000));
-}
-  
+  vTaskDelay(pdMS_TO_TICKS(500));
+
 #endif
 
   for(;;) {
     res = xQueueReceive(gameEventQueue, &event, portMAX_DELAY);
-    centerButtonPressed = false; /* reset */
+
     if (res==pdTRUE) { /* message received */
-      centerButtonPressed = event.button==BTN_NAV_CENTER && event.kind==MCUDBNC_EVENT_PRESSED;
+    
+    /* Kind of works, kind of doesn't 
+     Only moves the figure up and down with down and left button
+     freezes after some button presses
+    */
+    switch(event.kind){     // Check what kind of event it was
+      case Game_Event_Kind_Button:
+        switch(event.u.btn.button){     /*! \todo move player */
+          case BTN_NAV_LEFT:
+            if (event.u.btn.kind==MCUDBNC_EVENT_PRESSED){
+            Game_PlayerAction(Game_Player_Move_Left, Game_Player_Speed_Normal);
+            }
+            break;
+          case BTN_NAV_DOWN:
+            if (event.u.btn.kind==MCUDBNC_EVENT_PRESSED){
+            Game_PlayerAction(Game_Player_Move_Down, Game_Player_Speed_Normal);
+            }
+            break;
+          case BTN_NAV_RIGHT:
+            if (event.u.btn.kind==MCUDBNC_EVENT_PRESSED){
+            Game_PlayerAction(Game_Player_Move_Right, Game_Player_Speed_Normal);
+            }
+            break;
+          case BTN_NAV_UP:
+            if (event.u.btn.kind==MCUDBNC_EVENT_PRESSED){
+            Game_PlayerAction(Game_Player_Move_Up, Game_Player_Speed_Normal);
+            }
+            break;
+      }
+      event.kind = Game_Event_Kind_Update_View;
+      Game_SendEvent(&event);
+      break;
+      case Game_Event_Kind_None:
+      break;
+      case Game_Event_Kind_Update_View:
+      Game_ShowScreen(GAME_SCREEN_GAMEPLAY);
+      break;
+      case Game_Event_Kind_Game_Lost:
+      case Game_Event_Kind_Game_Won:
+      default:
+      break;
     }
-    if (centerButtonPressed) {
-#if LEDS_CONFIG_HAS_BLUE_LED
-      Leds_On(LEDS_BLUE);
-#elif LEDS_CONFIG_HAS_RED_LED
-      Leds_On(LEDS_RED);
-#endif
-      vTaskDelay(pdMS_TO_TICKS(50));
-#if LEDS_CONFIG_HAS_BLUE_LED
-      Leds_Off(LEDS_BLUE);
-#elif LEDS_CONFIG_HAS_RED_LED
-      Leds_Off(LEDS_RED);
-#endif
-    }
-    /* Erklärung, warum dies anfängt zu blinken:
-    Sobald man drückt, gilt es als pressed, also leuchtet die bleue Led (gemäss code oben) kurz auf
-    bleibt man nun auf dem knopf so zählt es nicht mehr als pressed sondern hold oder long_pressed-> deswegen blinkt nur noch die grüne led und nie mehr die 
-    solang gedrückt bleibt*/
-    Leds_Neg(LEDS_GREEN);
-    vTaskDelay(pdMS_TO_TICKS(100));
+
+    /*! \todo  Implementiere Sprites und Bewegung mit Controller*/
+
+  }
+  else{
+    for(;;){/*something wrong?!*/}
+  }
   }
 }
 #else

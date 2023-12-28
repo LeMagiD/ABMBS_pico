@@ -58,6 +58,7 @@ void Game_PlayerAction(Game_PlayerAction_e action, Game_Player_Speed_e speed) {
       case Game_Player_Move_Right: x=1;  y=0; break;
       default: x = y = 0; break;
     } /* switch */
+    
     if (speed==Game_Player_Speed_Fast) {
       x = 2*x;
       y = 2*y;

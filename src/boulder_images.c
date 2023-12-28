@@ -8,13 +8,13 @@
 
 static const uint8_t pixDataPlayer[] = {
   /* \todo be creative :) */
-  0b00010000,
-  0b00010000,
-  0b0001000,
-  0b00010000,
-  0b00010000,
-  0b00111000,
-  0b01000100,
+    0b01111110,
+    0b01010100,
+    0b01111100,
+    0b00010000,
+    0b00010000,
+    0b00111000,
+    0b01101100,
 };
 
 static const TIMAGE player = {
@@ -27,12 +27,12 @@ static const TIMAGE player = {
 
 static const uint8_t pixDataPlayerAnim0[] = {
   /* \todo be creative :) */
-    0b00000000,
-    0b00000000,
-    0b00000000,
-    0b00000000,
-    0b00000000,
-    0b00000000,
+    0b01111110,
+    0b01010100,
+    0b01111100,
+    0b00010000,
+    0b00111000,
+    0b01101100,
     0b00000000,
 };
 
